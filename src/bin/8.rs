@@ -37,60 +37,50 @@ fn map_signal(line: &String) -> [&str;10]  {
     let one = resolver
         .iter()
         .find(|&s| s.len() == 2)
-        .unwrap()
-        .to_owned();
+        .unwrap();
     let four = resolver
         .iter()
         .find(|&s| s.len() == 4)
-        .unwrap()
-        .to_owned();
+        .unwrap();
     let seven = resolver
         .iter()
         .find(|&s| s.len() == 3)
-        .unwrap()
-        .to_owned();
+        .unwrap();
     let eight = resolver
         .iter()
         .find(|&s| s.len() == 7)
-        .unwrap()
-        .to_owned();
+        .unwrap();
 
     let three = resolver
         .iter()
         .find(|&s| s.len() == 5 && one.chars().all(|c| s.contains(c)))
-        .unwrap()
-        .to_owned();
+        .unwrap();
     let nine = resolver
         .iter()
         .find(|&s| s.len() == 6 && four.chars().all(|c| s.contains(c)))
-        .unwrap()
-        .to_owned();
+        .unwrap();
     let six = resolver
         .iter()
         .find(|&s| s.len() == 6 && !one.chars().all(|c| s.contains(c)))
-        .unwrap()
-        .to_owned();
+        .unwrap();
     let zero = resolver
         .iter()
-        .find(|&s| s.len() == 6 && s != &nine && s != &six)
-        .unwrap()
-        .to_owned();
+        .find(|s| s.len() == 6 && s != &nine && s != &six)
+        .unwrap();
 
     let five = resolver
         .iter()
-        .find(|&s| s.len() == 5 && s != &three && s.chars().all(|c| six.contains(c)))
-        .unwrap()
-        .to_owned();
+        .find(|s| s.len() == 5 && s != &three && s.chars().all(|c| six.contains(c)))
+        .unwrap();
     let two = resolver
         .iter()
-        .find(|&s| s.len() == 5 && s != &five && s != &three)
-        .unwrap()
-        .to_owned();
+        .find(|s| s.len() == 5 && s != &five && s != &three)
+        .unwrap();
     [zero, one, two, three, four, five, six, seven, eight, nine]
 }
 
 fn part1(lines: &Vec<String>) -> usize {
-    let mut counter_all = 0;
+    let mut counter = 0;
     for line in lines {
         let new: Vec<String> = line
             .split('|')
@@ -102,12 +92,12 @@ fn part1(lines: &Vec<String>) -> usize {
             .collect();
         for e in searched {
             match e.chars().count() {
-                2|3|4|7 => counter_all += 1,
+                2|3|4|7 => counter += 1,
                 _ => (),
             }
         }
     }
-    counter_all
+    counter
 }
 
 fn main() {
