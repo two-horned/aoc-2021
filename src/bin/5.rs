@@ -1,4 +1,4 @@
-use std::{str::{FromStr, ParseBoolError}, collections::HashMap, cmp::Ordering};
+use std::{str::{FromStr, ParseBoolError}, collections::BTreeMap, cmp::Ordering};
 use asos::reader::read_lines;
 
 fn part2(lines: Vec<Destination>) -> usize {
@@ -39,7 +39,7 @@ fn solution(lines: Vec<Destination>) -> usize {
 
 impl Grid {
     fn new() -> Grid {
-        Grid {map: HashMap::new()}
+        Grid {map: BTreeMap::new()}
     }
 
     fn push_vec(&mut self, vec: Vec<(i16,i16)>) {
@@ -59,7 +59,7 @@ impl Grid {
 
 #[derive(Debug)]
 struct Grid {
-    map: HashMap<(i16, i16), u16>,
+    map: BTreeMap<(i16, i16), u16>,
 }
 
 impl FromStr for Destination {

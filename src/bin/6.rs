@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use asos::reader::read_first_line;
 
 fn solution(vec: Vec<u8>, days: u16) -> usize {
@@ -12,13 +12,13 @@ fn solution(vec: Vec<u8>, days: u16) -> usize {
 }
 
 impl Ocean { fn new() -> Ocean {
-        Ocean {fishmap: HashMap::new()}
+        Ocean {fishmap: BTreeMap::new()}
     }
 
     fn day_pass(&mut self, days: u16) {
         let mut now = 0;
         while now < days {
-            let mut new_fishmap = HashMap::new();
+            let mut new_fishmap = BTreeMap::new();
             for fish in self.fishmap.clone() {
                 if fish.0 == 0 {
                     let value = new_fishmap.entry(6).or_insert(0);
@@ -44,7 +44,7 @@ impl Ocean { fn new() -> Ocean {
 }
 
 struct Ocean {
-    fishmap: HashMap<u8, usize>,
+    fishmap: BTreeMap<u8, usize>,
 }
 
 fn main() {
