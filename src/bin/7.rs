@@ -1,4 +1,4 @@
-use asos::reader::read_first_line;
+use asos::reader::read_comma_line;
 
 fn part2(sorted_line: Vec<u32>) -> u32 {
     let max = sorted_line.last().unwrap().to_owned();
@@ -32,7 +32,7 @@ fn part1(sorted_line: Vec<u32>) -> u32 {
 }
 
 fn main() {
-    let mut line: Vec<u32> = read_first_line("7");
+    let mut line: Vec<u32> = read_comma_line("7");
     line.sort();
     println!("part1: {}", part1(line.clone()));
     println!("part2: {}", part2(line));

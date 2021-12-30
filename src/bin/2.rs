@@ -1,5 +1,4 @@
-use std::str::FromStr;
-use std::str::ParseBoolError;
+use std::str::{FromStr, ParseBoolError};
 use asos::reader::read_lines;
 
 fn part2(lines: &Vec<Direction>) -> i32 {

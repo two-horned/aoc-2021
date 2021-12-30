@@ -1,4 +1,4 @@
-use std::{str::{FromStr, ParseBoolError}, collections::BTreeMap, cmp::Ordering};
+use std::{str::{FromStr, ParseBoolError}, collections::BTreeMap};
 use asos::reader::read_lines;
 
 fn part2(lines: Vec<Destination>) -> usize {
@@ -15,21 +15,11 @@ fn solution(lines: Vec<Destination>) -> usize {
     let mut grid: Grid = Grid::new();
     for line in lines {
         let mut diffx = line.to.x - line.from.x;
-        let killerx = match diffx.cmp(&0) {
-            Ordering::Less => -1,
-            Ordering::Equal => 0,
-            Ordering::Greater => 1,
-        };
         let mut diffy = line.to.y - line.from.y;
-        let killery = match diffy.cmp(&0) {
-            Ordering::Less => -1,
-            Ordering::Equal => 0,
-            Ordering::Greater => 1,
-        };
             vec.push((line.to.x-diffx, line.to.y-diffy));
         while diffx != 0 || diffy != 0 {
-            diffx -= killerx;
-            diffy -= killery;
+            diffx -= diffx.signum();
+            diffy -= diffy.signum();
             vec.push((line.to.x-diffx, line.to.y-diffy));
         }
     }

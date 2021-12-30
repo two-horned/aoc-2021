@@ -39,7 +39,7 @@ where
     matrix
 }
 
-pub fn read_first_line<T: FromStr>(filename: &str) -> Vec<T>
+pub fn read_comma_line<T: FromStr>(filename: &str) -> Vec<T>
     where
         <T as FromStr>::Err: Error,
 {

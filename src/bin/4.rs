@@ -1,11 +1,11 @@
 use std::str::{FromStr, ParseBoolError};
-use asos::reader::{read_first_line, read_lines};
+use asos::reader::{read_comma_line, read_lines};
 
-fn part2(bingo: Bingo) -> u32 {
+fn part2(bingo: &Bingo) -> u32 {
     let board_count = bingo.boards.len();
-    let mut boards: Vec<Board> = bingo.boards;
+    let mut boards: Vec<Board> = bingo.boards.to_vec();
     let mut bingo_count = 0;
-    for r in bingo.row {
+    for r in bingo.row.to_vec() {
         for board in boards.iter_mut().filter(|b| !b.check_bingo()) {
             board.mark_number(r);
             if board.check_bingo() {
@@ -19,9 +19,10 @@ fn part2(bingo: Bingo) -> u32 {
     0
 }
 
-fn part1(mut bingo: Bingo) -> u32 {
-    for r in bingo.row {
-        for board in &mut bingo.boards {
+fn part1(bingo: &Bingo) -> u32 {
+    let mut fake_bingo = bingo.clone();
+    for r in fake_bingo.row {
+        for board in &mut fake_bingo.boards {
             board.mark_number(r);
             if board.check_bingo() {
                 return r * board.sum_unmarked();
@@ -38,8 +39,7 @@ fn parse_bingo(filename: &str) -> Bingo {
     lines.retain(|s| s!="");
 
     for chunk in lines.chunks(5) {
-        let n = Number {marked: false, value: 0};
-        let mut board = Board {lines: [[n; 5]; 5]};
+        let mut board = Board {lines: [[Number::new(); 5]; 5]};
         for index in 0..5 {
             let row: Vec<Number> = chunk[index]
             .split_whitespace()
@@ -51,7 +51,7 @@ fn parse_bingo(filename: &str) -> Bingo {
         }
         boards.push(board);
     }
-    Bingo { row: read_first_line(filename), boards: boards }
+    Bingo { row: read_comma_line(filename), boards: boards }
 }
 
 impl FromStr for Number {
@@ -106,6 +106,12 @@ impl Board {
     }
 }
 
+impl Number {
+    fn new() -> Number {
+        Number {marked: false, value: 0}
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 struct Number{
     marked: bool,
@@ -125,6 +131,6 @@ struct Bingo {
 
 fn main() {
     let bingo: Bingo = parse_bingo("4");
-    println!("part1: {}", part1(bingo.clone()));
-    println!("part2: {}", part2(bingo.clone()));
+    println!("part1: {}", part1(&bingo));
+    println!("part2: {}", part2(&bingo));
 }
