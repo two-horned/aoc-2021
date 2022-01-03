@@ -4,14 +4,13 @@ use asos::reader::read_lines;
 fn part2(lines: &Vec<Shiffre>) -> usize {
     let mut sum = 0;
     for line in lines {
-        let mut number = "".to_string();
+        let mut number = String::from("");
         let mapper = line.map_signal();
         for s in &line.searcher {
-            let k = mapper.keys()
+            let k = *mapper.keys()
                 .find(|t| s.len() == t.len() && s.chars().all(|c| t.contains(c)))
-                .unwrap()
-                .to_owned();
-            number = number + &mapper.get(k).unwrap().to_string();
+                .unwrap();
+            number = number + &mapper[k].to_string();
         }
         let n: usize = number.parse().unwrap();
         sum += n;
@@ -37,15 +36,15 @@ impl FromStr for Shiffre {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let n: Vec<String> = s
             .split('|')
-            .map(|e| e.trim().to_string())
+            .map(|e| String::from(e))
             .collect();
         let resolver: Vec<String> = n[0]
             .split_whitespace()
-            .map(|e| e.to_string())
+            .map(|e|String::from(e))
             .collect();
         let searcher: Vec<String> = n[1]
             .split_whitespace()
-            .map(|e| e.to_string())
+            .map(|e| String::from(e))
             .collect();
         Ok(Shiffre {resolver: resolver, searcher: searcher})
     }
