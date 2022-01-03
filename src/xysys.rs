@@ -1,6 +1,6 @@
 impl Matrix2D {
     pub fn new() -> Matrix2D {
-        Matrix2D {list: Vec::new()}
+        Matrix2D {list: vec![]}
     }
 
     pub fn get_val(&self, x: isize, y: isize) -> Option<u8> {

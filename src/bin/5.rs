@@ -11,7 +11,7 @@ fn part1(mut lines: Vec<Destination>) -> usize {
 }
 
 fn solution(lines: Vec<Destination>) -> usize {
-    let mut vec = Vec::new();
+    let mut vec = vec![];
     let mut grid: Grid = Grid::new();
     for line in lines {
         let mut diffx = line.to.x - line.from.x;

@@ -32,8 +32,8 @@ fn part1(bingo: &Bingo) -> u32 {
     0
 }
 
-fn parse_bingo(filename: &str) -> Bingo {
-    let mut boards: Vec<Board> = Vec::new();
+fn to_bingo(filename: &str) -> Bingo {
+    let mut boards: Vec<Board> = vec![];
     let mut lines: Vec<String> = read_lines(filename);
     lines.remove(0);
     lines.retain(|s| s!="");
@@ -130,7 +130,7 @@ struct Bingo {
 }
 
 fn main() {
-    let bingo: Bingo = parse_bingo("4");
+    let bingo: Bingo = to_bingo("4");
     println!("part1: {}", part1(&bingo));
     println!("part2: {}", part2(&bingo));
 }

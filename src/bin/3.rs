@@ -1,7 +1,7 @@
 use asos::reader::read_matrix;
 use asos::convertz::bin_vec_to_dec;
 
-fn part2_body(prefer: bool, matrix: &Vec<Vec<u8>>) -> u32 {
+fn preferer(prefer: bool, matrix: &Vec<Vec<u8>>) -> u32 {
     let zero = if prefer {0} else {1};
     let one = if prefer {1} else {0};
     let mut fake_matrix: Vec<Vec<u8>> = matrix.to_vec();
@@ -23,13 +23,13 @@ fn part2_body(prefer: bool, matrix: &Vec<Vec<u8>>) -> u32 {
 }
 
 fn part2(matrix: &Vec<Vec<u8>>) -> u32 {
-    let gamma = part2_body(true, matrix);
-    let epsilon = part2_body(false, matrix);
+    let gamma = preferer(true, matrix);
+    let epsilon = preferer(false, matrix);
     gamma * epsilon
 }
 
 fn part1(matrix: &Vec<Vec<u8>>) -> u32 {
-    let mut gamma: Vec<u8> = Vec::new();
+    let mut gamma: Vec<u8> = vec![];
     for index in 0..matrix[0].len() {
         let times = matrix
             .iter()
