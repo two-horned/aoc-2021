@@ -3,8 +3,8 @@ use asos::reader::read_comma_line;
 
 fn solution(vec: &Vec<u8>, days: u16) -> u64 {
     let mut ocean: Ocean = Ocean::new();
-    for v in vec.clone() {
-            let counter = ocean.fishmap.entry(v).or_insert(0);
+    for v in vec {
+            let counter = ocean.fishmap.entry(*v).or_insert(0);
         *counter += 1;
     }
     ocean.day_pass(days);
@@ -18,15 +18,13 @@ impl Ocean { fn new() -> Ocean {
     fn day_pass(&mut self, days: u16) {
         let mut now = 0;
         while now < days {
-            let mut new_fishmap = BTreeMap::new();
-            for fish in self.fishmap.clone() {
-                if fish.0 == 0 {
-                    let value = new_fishmap.entry(6).or_insert(0);
-                    *value += fish.1;
-                    new_fishmap.insert(8, fish.1);
+        let mut new_fishmap = BTreeMap::new();
+            for fish in &self.fishmap {
+                if *fish.0 == 0 {
+                    *new_fishmap.entry(6).or_insert(0) += fish.1;
+                    new_fishmap.insert(8, *fish.1);
                 } else {
-                    let value = new_fishmap.entry(fish.0 - 1).or_insert(0);
-                    *value += fish.1;
+                    *new_fishmap.entry(fish.0 - 1).or_insert(0) += fish.1;
                 }
             }
             self.fishmap = new_fishmap;

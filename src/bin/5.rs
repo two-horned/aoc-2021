@@ -1,16 +1,13 @@
 use std::{str::{FromStr, ParseBoolError}, collections::BTreeMap};
 use asos::reader::read_lines;
 
-fn part2(lines: Vec<Destination>) -> usize {
-    solution(lines)
-}
-
-fn part1(mut lines: Vec<Destination>) -> usize {
+fn part1(lines: &Vec<Destination>) -> usize {
+    let mut lines = lines.to_vec();
     lines.retain(|e| e.from.x == e.to.x || e.from.y == e.to.y);
-    solution(lines)
+    solution(&lines)
 }
 
-fn solution(lines: Vec<Destination>) -> usize {
+fn solution(lines: &Vec<Destination>) -> usize {
     let mut vec = vec![];
     let mut grid: Grid = Grid::new();
     for line in lines {
@@ -89,6 +86,6 @@ struct Coord {
 
 fn main() {
     let lines: Vec<Destination> = read_lines("5");
-    println!("{}", part1(lines.clone()));
-    println!("{}", part2(lines));
+    println!("{}", part1(&lines));
+    println!("{}", solution(&lines));
 }

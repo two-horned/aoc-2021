@@ -20,9 +20,9 @@ fn part2(bingo: &Bingo) -> u32 {
 }
 
 fn part1(bingo: &Bingo) -> u32 {
-    let mut fake_bingo = bingo.clone();
-    for r in fake_bingo.row {
-        for board in &mut fake_bingo.boards {
+    let mut bingo = bingo.clone();
+    for r in bingo.row {
+        for board in &mut bingo.boards {
             board.mark_number(r);
             if board.check_bingo() {
                 return r * board.sum_unmarked();
