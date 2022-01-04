@@ -24,6 +24,6 @@ fn part1(lines: &Vec<u16>) -> u16 {
 
 fn main() {
     let lines = read_lines("1");
-    println!("part1{} {}", ':', part1(&lines));
-    println!("part2{} {}", ':', part2(&lines));
+    println!("part1: {}", part1(&lines));
+    println!("part2: {}", part2(&lines));
 }

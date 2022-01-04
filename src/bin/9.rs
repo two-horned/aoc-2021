@@ -2,11 +2,11 @@ use std::collections::BTreeSet;
 use asos::reader::read_matrix;
 use asos::xysys::{Matrix2D, Point};
 
-fn low_points(dingo: &Matrix2D) -> Vec<Point> {
+fn low_points(dingo: &Matrix2D) -> Vec<&Point> {
     let mut v = vec![];
     for points in dingo.list() {
         for point in points {
-            let surround = dingo.get_surround(*point);
+            let surround = dingo.get_surround(point);
             if surround
                 .iter()
                 .all(|&c| if c.is_none() {
@@ -14,7 +14,7 @@ fn low_points(dingo: &Matrix2D) -> Vec<Point> {
                 } else {
                     c.unwrap().get() > point.get()
                 }) {
-                v.push(*point);
+                v.push(point);
             }
         }
     }
@@ -24,16 +24,18 @@ fn low_points(dingo: &Matrix2D) -> Vec<Point> {
 fn part2(dingo: &Matrix2D) -> usize {
     let mut basins: Vec<usize> = vec![];
     for low_point in low_points(&dingo) {
-        let mut set: BTreeSet<Point> = BTreeSet::new();
-        let mut surround = vec![low_point];
-        while let Some(new_point) = surround.pop() {
-            set.insert(new_point);
-            for s in dingo.get_surround(new_point) {
+        let mut set: BTreeSet<[usize; 2]> = BTreeSet::new();
+        let mut surround = vec![*low_point];
+        while let Some(point) = surround.pop() {
+            set.insert(point.get_coord());
+            for s in dingo.get_surround(&point) {
                 if s.is_some() {
-                    surround.push(s.unwrap());
+                    let p = *s.unwrap();
+                    if !set.contains(&p.get_coord()) && p.get() != 9 {
+                        surround.push(p);
+                    }
                 }
             }
-            surround.retain(|e| !set.contains(e));
         }
         basins.push(set.len());
     }

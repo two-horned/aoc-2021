@@ -19,21 +19,21 @@ impl Matrix2D {
         Matrix2D { list: list, wth: wth, len: matrix.len() }
     }
 
-    pub fn get_point(&self, x: isize, y: isize) -> Option<Point> {
+    pub fn get_point(&self, x: isize, y: isize) -> Option<&Point> {
         if x < 0 || y < 0 {
             return None;
         }
         let x = x as usize;
-        let y = x as usize;
+        let y = y as usize;
         if x >= self.len() || y >= self.wth() {
             return None;
         }
-        Some(self.list[x][y])
+        Some(&self.list[y][x])
     }
 
     /** Get surrounding points.
-     * Beginning at bottom, proceeding in clock direction. **/
-    pub fn get_surround(&self, point: Point) -> [Option<Point>; 4] {
+     Beginning at bottom, proceeding in clock direction. */
+    pub fn get_surround(&self, point: &Point) -> [Option<&Point>; 4] {
         let [x, y] = point.get_coord();
         let x = x as isize;
         let y = y as isize;
@@ -47,7 +47,7 @@ impl Matrix2D {
     }
 
     /** Get even diagonally surrounding points **/
-    pub fn get_all_surround(&self, point: Point) -> [Option<Point>; 8] {
+    pub fn get_all_surround(&self, point: Point) -> [Option<&Point>; 8] {
         let [x, y] = point.get_coord();
         let x = x as isize;
         let y = y as isize;
@@ -91,7 +91,7 @@ impl Point {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Point {
     coordinates: [usize; 2],
     value: u8,

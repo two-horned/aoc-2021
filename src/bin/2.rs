@@ -56,6 +56,6 @@ enum Direction {
 
 fn main() {
     let lines: Vec<Direction> = read_lines("2");
-    println!("part1{} {}", ':', part1(&lines));
-    println!("part2{} {}", ':', part2(&lines));
+    println!("part1: {}", part1(&lines));
+    println!("part2: {}", part2(&lines));
 }
