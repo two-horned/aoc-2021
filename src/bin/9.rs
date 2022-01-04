@@ -1,27 +1,36 @@
 use std::collections::BTreeSet;
-use asos::{reader::read_matrix, xysys::Matrix2D};
+use asos::reader::read_matrix;
+use asos::xysys::{Matrix2D, Point};
+
+fn low_points(dingo: &Matrix2D) -> Vec<Point> {
+    let mut v = vec![];
+    for points in dingo.list() {
+        for point in points {
+            let surround = dingo.get_surround(*point);
+            if surround
+                .iter()
+                .all(|&c| if c.is_none() {
+                    true
+                } else {
+                    c.unwrap().get() > point.get()
+                }) {
+                v.push(*point);
+            }
+        }
+    }
+    v
+}
 
 fn part2(dingo: &Matrix2D) -> usize {
-    let lower_points = low_points(&dingo);
     let mut basins: Vec<usize> = vec![];
-    for (low_x, low_y) in lower_points {
-        let mut set: BTreeSet<(isize, isize)> = BTreeSet::new();
-        let mut surround = vec![(low_x, low_y)];
-        while let Some((x, y)) = surround.pop() {
-            set.insert((x, y));
-            let new_index: Vec<usize> = dingo.get_surround(x, y)
-                .iter()
-                .enumerate()
-                .filter(|&(_, &x)| x != Some(9) && x != None)
-                .map(|(e, &_)| e)
-                .collect();
-            for n in new_index {
-                match n {
-                    0 => surround.push((x-1, y)),
-                    1 => surround.push((x, y+1)),
-                    2 => surround.push((x+1, y)),
-                    3 => surround.push((x, y-1)),
-                    _ => unreachable!()
+    for low_point in low_points(&dingo) {
+        let mut set: BTreeSet<Point> = BTreeSet::new();
+        let mut surround = vec![low_point];
+        while let Some(new_point) = surround.pop() {
+            set.insert(new_point);
+            for s in dingo.get_surround(new_point) {
+                if s.is_some() {
+                    surround.push(s.unwrap());
                 }
             }
             surround.retain(|e| !set.contains(e));
@@ -36,34 +45,16 @@ fn part2(dingo: &Matrix2D) -> usize {
         .product()
 }
 
-fn low_points(dingo: &Matrix2D) -> Vec<(isize, isize)> {
-    let mut v = vec![];
-    for (x, each) in dingo.get_list().iter().enumerate() {
-        for (y, e) in each.iter().enumerate() {
-            let x = x as isize;
-            let y = y as isize;
-            let surround = dingo.get_surround(x, y);
-            if surround.iter().all(|&c| c > Some(*e) || c == None) {
-                v.push((x, y));
-            }
-        }
-    }
-    v
-}
 
 fn part1(dingo: &Matrix2D) -> u16 {
     low_points(&dingo)
         .iter()
-        .map(|&(x, y)| (dingo.get_val(x, y).unwrap() + 1) as u16)
+        .map(|&x| (x.get() + 1) as u16)
         .sum()
 }
 
 fn main() {
-    let matrix: Vec<Vec<u8>> = read_matrix("9");
-    let mut dingo: Matrix2D = Matrix2D::new();
-    for each in matrix {
-        dingo.push_line(each);
-    }
+    let dingo: Matrix2D = Matrix2D::from(read_matrix("9"));
     println!("part1: {}", part1(&dingo));
     println!("part2: {}", part2(&dingo));
 }

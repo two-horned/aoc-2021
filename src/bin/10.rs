@@ -46,7 +46,7 @@ struct Syntax {
     opened: Vec<char>,
 }
 
-fn part2(lines: &[Vec<char>]) -> u32 {
+fn part2(lines: &[Vec<char>]) -> u64 {
     let bonus = BTreeMap::from([('(', 1), ('[', 2), ('{', 3), ('<', 4)]);
     let mut scores = vec![];
     let mut syntax = Syntax::new();
@@ -68,7 +68,7 @@ fn part2(lines: &[Vec<char>]) -> u32 {
     
 }
 
-fn part1(lines: &[Vec<char>]) -> u16 {
+fn part1(lines: &[Vec<char>]) -> u32 {
     let malus = BTreeMap::from([(')', 3), (']', 57), ('}', 1197), ('>', 25137)]);
     let mut score = 0;
     let mut syntax = Syntax::new();

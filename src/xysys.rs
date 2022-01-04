@@ -1,51 +1,104 @@
 impl Matrix2D {
-    pub fn new() -> Matrix2D {
-        Matrix2D {list: vec![]}
+
+    pub fn from(matrix: Vec<Vec<u8>>) -> Matrix2D {
+        let mut list = vec![];
+        let wth = matrix[0].len();
+        for line in matrix.iter().enumerate() {
+            let mut row = vec![];
+            if line.1.len() != wth {
+                panic!()
+            }
+            for l in line.1.iter().enumerate() {
+                row.push(Point {
+                    coordinates: [l.0, line.0],
+                    value: *l.1,
+                })
+            }
+            list.push(row)
+        }
+        Matrix2D { list: list, wth: wth, len: matrix.len() }
     }
 
-    pub fn get_val(&self, x: isize, y: isize) -> Option<u8> {
+    pub fn get_point(&self, x: isize, y: isize) -> Option<Point> {
         if x < 0 || y < 0 {
             return None;
-        } else if x as usize + 1 > self.x_len() || y as usize + 1 > self.y_len() {
+        }
+        let x = x as usize;
+        let y = x as usize;
+        if x >= self.len() || y >= self.wth() {
             return None;
         }
-        Some(self.list[x as usize][y as usize])
+        Some(self.list[x][y])
     }
 
-    pub fn get_surround(&self, x: isize, y: isize) -> [Option<u8>;4] {
+    /** Get surrounding points.
+     * Beginning at bottom, proceeding in clock direction. **/
+    pub fn get_surround(&self, point: Point) -> [Option<Point>; 4] {
+        let [x, y] = point.get_coord();
+        let x = x as isize;
+        let y = y as isize;
         [
-            self.get_val(x-1, y),
-            self.get_val(x, y+1),
-            self.get_val(x+1, y),
-            self.get_val(x, y-1),
+            // Clockwork
+            self.get_point(x, y-1),
+            self.get_point(x-1, y),
+            self.get_point(x, y+1),
+            self.get_point(x+1, y),
         ]
     }
 
-    pub fn x_len(&self) -> usize {
-        self.list.len()
+    /** Get even diagonally surrounding points **/
+    pub fn get_all_surround(&self, point: Point) -> [Option<Point>; 8] {
+        let [x, y] = point.get_coord();
+        let x = x as isize;
+        let y = y as isize;
+        [
+            // Clockwork
+            self.get_point(x, y-1),
+            self.get_point(x-1,y-1),
+            self.get_point(x-1, y),
+            self.get_point(x-1, y+1),
+            self.get_point(x, y+1),
+            self.get_point(x+1, y+1),
+            self.get_point(x+1, y),
+            self.get_point(x+1,y-1),
+        ]
     }
 
-    pub fn y_len(&self) -> usize {
-        if self.x_len() == 0 {
-            return 0;
-        }
-        self.list[0].len()
+    pub fn len(&self) -> usize {
+        self.len
     }
 
-    pub fn push_line(&mut self, vec: Vec<u8>) -> bool {
-        if self.x_len() == 0 || self.y_len() == vec.len() {
-            self.list.push(vec);
-            return true;
-        }
-        false
+    pub fn wth(&self) -> usize {
+        self.wth
     }
-
-    pub fn get_list(&self) -> &Vec<Vec<u8>> {
+    
+    pub fn list(&self) -> &[Vec<Point>] {
         &self.list
     }
 }
 
-#[derive(Debug)]
+impl Point {
+    pub fn get(&self) -> u8 {
+        self.value
+    }
+    
+    pub fn get_coord(&self) -> [usize; 2] {
+        self.coordinates
+    }
+
+    pub fn set(&mut self, set: u8) {
+        self.value = set;
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub struct Point {
+    coordinates: [usize; 2],
+    value: u8,
+}
+
 pub struct Matrix2D {
-    list: Vec<Vec<u8>>,
+    list: Vec<Vec<Point>>,
+    wth: usize,
+    len: usize,
 }
