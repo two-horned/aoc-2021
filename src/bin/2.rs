@@ -1,3 +1,4 @@
+use std::time::Instant;
 use std::str::{FromStr, ParseBoolError};
 use asos::reader::read_lines;
 
@@ -55,7 +56,9 @@ enum Direction {
 }
 
 fn main() {
+    let now = Instant::now();
     let lines: Vec<Direction> = read_lines("2");
     println!("part1: {}", part1(&lines));
     println!("part2: {}", part2(&lines));
+    println!("Time: < {}ms", now.elapsed().as_millis() + 1);
 }

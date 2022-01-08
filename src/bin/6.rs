@@ -1,11 +1,11 @@
+use std::time::Instant;
 use std::collections::BTreeMap;
 use asos::reader::read_comma_line;
 
 fn solution(vec: &Vec<u8>, days: u16) -> u64 {
     let mut ocean: Ocean = Ocean::new();
     for v in vec {
-            let counter = ocean.fishmap.entry(*v).or_insert(0);
-        *counter += 1;
+        *ocean.fishmap.entry(*v).or_insert(0) += 1;
     }
     ocean.day_pass(days);
     ocean.count_fish()
@@ -46,7 +46,9 @@ struct Ocean {
 }
 
 fn main() {
+    let now = Instant::now();
     let line: Vec<u8> = read_comma_line("6");
     println!("part1: {}", solution(&line, 80));
     println!("part2: {}", solution(&line, 256));
+    println!("Time: < {}ms", now.elapsed().as_millis() + 1);
 }

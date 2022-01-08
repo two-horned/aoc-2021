@@ -1,52 +1,34 @@
-use std::{str::{FromStr, ParseBoolError}, collections::BTreeMap};
+use std::time::Instant;
+use std::str::{FromStr, ParseBoolError};
+use std::collections::HashMap;
 use asos::reader::read_lines;
 
 fn part1(lines: &Vec<Destination>) -> usize {
-    let mut lines = lines.to_vec();
+    let mut lines = lines.clone();
     lines.retain(|e| e.from.x == e.to.x || e.from.y == e.to.y);
     solution(&lines)
 }
 
 fn solution(lines: &Vec<Destination>) -> usize {
     let mut vec = vec![];
-    let mut grid: Grid = Grid::new();
+    let mut grid = HashMap::new();
     for line in lines {
         let mut diffx = line.to.x - line.from.x;
         let mut diffy = line.to.y - line.from.y;
-            vec.push((line.to.x-diffx, line.to.y-diffy));
+        vec.push([line.from.x, line.from.y]);
         while diffx != 0 || diffy != 0 {
             diffx -= diffx.signum();
             diffy -= diffy.signum();
-            vec.push((line.to.x-diffx, line.to.y-diffy));
+            vec.push([line.to.x-diffx, line.to.y-diffy]);
         }
     }
-    grid.push_vec(vec);
-    grid.count_overlap()
-}
-
-impl Grid {
-    fn new() -> Grid {
-        Grid {map: BTreeMap::new()}
+    for v in vec {
+        *grid.entry(v).or_insert(0) += 1;
     }
-
-    fn push_vec(&mut self, vec: Vec<(i16,i16)>) {
-        for v in vec {
-            let counter = self.map.entry(v).or_insert(0);
-            *counter += 1;
-        }
-    }
-    fn count_overlap(self) -> usize {
-        self.map
-            .values()
-            .into_iter()
-            .filter(|&&v| v>1)
-            .count()
-    }
-}
-
-#[derive(Debug)]
-struct Grid {
-    map: BTreeMap<(i16, i16), u16>,
+    grid
+        .iter()
+        .filter(|(_, &v)| v>1)
+        .count()
 }
 
 impl FromStr for Destination {
@@ -60,8 +42,7 @@ impl FromStr for Destination {
     }
 }
 
-
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy)]
 struct Destination {
     from: Coord,
     to: Coord,
@@ -78,14 +59,16 @@ impl FromStr for Coord {
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy)]
 struct Coord {
     x: i16,
     y: i16,
 }
 
 fn main() {
+    let now = Instant::now();
     let lines: Vec<Destination> = read_lines("5");
     println!("{}", part1(&lines));
     println!("{}", solution(&lines));
+    println!("Time: < {}ms", now.elapsed().as_millis() + 1);
 }

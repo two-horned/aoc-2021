@@ -1,3 +1,4 @@
+use std::time::Instant;
 use asos::reader::read_matrix;
 use asos::convertz::bin_vec_to_dec;
 
@@ -47,7 +48,9 @@ fn part1(matrix: &[Vec<u8>]) -> u32 {
 }
 
 fn main() {
+    let now = Instant::now();
     let matrix: Vec<Vec<u8>> = read_matrix("3");
     println!("part 1: {}", part1(&matrix));
     println!("part 2: {}", part2(&matrix));
+    println!("Time: < {}ms", now.elapsed().as_millis() + 1);
 }

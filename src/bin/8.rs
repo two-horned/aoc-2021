@@ -1,3 +1,4 @@
+use std::time::Instant;
 use std::{str::{FromStr, ParseBoolError}, collections::BTreeMap};
 use asos::reader::read_lines;
 
@@ -10,7 +11,7 @@ fn part2(lines: &Vec<Shiffre>) -> usize {
             let k = *mapper.keys()
                 .find(|t| s.len() == t.len() && s.chars().all(|c| t.contains(c)))
                 .unwrap();
-            number = number + &mapper[k].to_string();
+            number = number + &mapper[k];
         }
         let n: usize = number.parse().unwrap();
         sum += n;
@@ -18,7 +19,7 @@ fn part2(lines: &Vec<Shiffre>) -> usize {
     sum
 }
 
-fn part1(lines: &Vec<Shiffre>) -> usize {
+fn part1(lines: &Vec<Shiffre>) -> u16 {
     let mut counter = 0;
     for line in lines {
         for e in &line.searcher {
@@ -51,8 +52,8 @@ impl FromStr for Shiffre {
 }
 
 impl Shiffre {
-    fn map_signal(&self) -> BTreeMap<&String, usize>  {
-        let mut map: BTreeMap<&String, usize> = BTreeMap::new();
+    fn map_signal(&self) -> BTreeMap<&String, String>  {
+        let mut map: BTreeMap<&String, String> = BTreeMap::new();
         let one = self.resolver
             .iter()
             .find(|&s| s.len() == 2)
@@ -95,7 +96,7 @@ impl Shiffre {
             .unwrap();
         let a: [&String; 10] = [zero, one, two, three, four, five, six, seven, eight, nine];
         for (i, t) in a.iter().enumerate() {
-            map.insert(t, i);
+            map.insert(t, i.to_string());
         }
         map
     }
@@ -107,7 +108,9 @@ struct Shiffre {
 }
 
 fn main() {
+    let now = Instant::now();
     let line: Vec<Shiffre> = read_lines("8");
     println!("part1: {}", part1(&line));
     println!("part2: {}", part2(&line));
+    println!("Time: < {}ms", now.elapsed().as_millis() + 1);
 }

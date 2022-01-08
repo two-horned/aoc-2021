@@ -1,8 +1,7 @@
+use std::time::Instant;
 use asos::reader::read_comma_line;
 
-fn part2(sorted_line: &Vec<u32>) -> u32 {
-    let max = *sorted_line.last().unwrap();
-    let min = *sorted_line.first().unwrap();
+fn part2(sorted_line: &Vec<u32>, min: u32, max: u32) -> u32 {
     let mut vec = vec![];
     for pos in min..= max + 1 {
         let mut fuel = 0;
@@ -16,9 +15,7 @@ fn part2(sorted_line: &Vec<u32>) -> u32 {
     *vec.first().unwrap()
 }
 
-fn part1(sorted_line: &Vec<u32>) -> u32 {
-    let max = *sorted_line.last().unwrap();
-    let min = *sorted_line.first().unwrap();
+fn part1(sorted_line: &Vec<u32>, min: u32, max: u32) -> u32 {
     let mut vec = vec![];
     for pos in min..= max + 1 {
         let mut fuel = 0;
@@ -32,8 +29,11 @@ fn part1(sorted_line: &Vec<u32>) -> u32 {
 }
 
 fn main() {
+    let now = Instant::now();
     let mut line: Vec<u32> = read_comma_line("7");
     line.sort();
-    println!("part1: {}", part1(&line));
-    println!("part2: {}", part2(&line));
+    let [min, max] = [*line.first().unwrap(), *line.last().unwrap()];
+    println!("part1: {}", part1(&line, min, max));
+    println!("part2: {}", part2(&line, min, max));
+    println!("Time: < {}ms", now.elapsed().as_millis() + 1);
 }

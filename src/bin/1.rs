@@ -1,3 +1,4 @@
+use std::time::Instant;
 use asos::reader::read_lines;
 
 fn part2(lines: &Vec<u16>) -> u16 {
@@ -23,7 +24,9 @@ fn part1(lines: &Vec<u16>) -> u16 {
 }
 
 fn main() {
+    let now = Instant::now();
     let lines = read_lines("1");
     println!("part1: {}", part1(&lines));
     println!("part2: {}", part2(&lines));
+    println!("Time: < {}ms", now.elapsed().as_millis() + 1);
 }

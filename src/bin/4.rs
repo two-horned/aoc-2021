@@ -1,3 +1,4 @@
+use std::time::Instant;
 use std::str::{FromStr, ParseBoolError};
 use asos::reader::{read_comma_line, read_lines};
 
@@ -130,7 +131,9 @@ struct Bingo {
 }
 
 fn main() {
+    let now = Instant::now();
     let bingo: Bingo = to_bingo("4");
     println!("part1: {}", part1(&bingo));
     println!("part2: {}", part2(&bingo));
+    println!("Time: < {}ms", now.elapsed().as_millis() + 1);
 }
